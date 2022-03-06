@@ -116,6 +116,7 @@ close(io)
 """
 function mmap_fun!(fn, f, img1, img2)
   io, B = prepare_mmap(fn, img1)
+  dims = size(img1)
   for i in 1:prod(dims)
     B[i] = f(img1[i], img2[i]) 
   end
