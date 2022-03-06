@@ -3,6 +3,16 @@ uuid = "139abf04-b8a8-4152-a46d-869f560e18d1"
 authors = ["Donghoon Lee <mdhe1248@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+Mmap = "a63ad114-7e13-5084-954f-fe012c677804"
+NRRD = "9bb6cfbd-7763-5393-b1b5-1c8e09872146"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
 [compat]
 julia = "1"
 
