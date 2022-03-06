@@ -1,9 +1,9 @@
 module LightsheetImageTools
 
 using Images, NRRD, FileIO, Mmap
-using Distributions, LinearAlgebra, Interpolations
-using Statistics
+using Distributions, Interpolations, Statistics
 using JLD2
+#LinearAlgebra
 # Write your package code here.
 
 export lightsheetNorm, lightsheetNorm!, normalizeImg!
