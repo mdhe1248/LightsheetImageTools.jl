@@ -7,10 +7,11 @@ using JLD2
 # Write your package code here.
 
 export lightsheetNorm, lightsheetNorm!, normalizeImg!
-export mmap_mapwindow!, mmap_fun!,create_NRRD_header1
+export mmap_mapwindow!, mmap_fun!, _mean, create_NRRD_header1
 export blob_LoG_split, blobSelection, blobSelectEdge, replaceBlobPos
 export markImg!
 export coord_scaling, coordTransform_nrrd_jl2elx
+export saveroi4Elastix
 
 """Image Normalization"""
 function normalizeImg(img::AbstractArray, thresh; f = mean)
