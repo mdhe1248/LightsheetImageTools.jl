@@ -12,6 +12,7 @@ export blob_LoG_split, blobSelection, blobSelectEdge, replaceBlobPos
 export markImg!
 export coord_scaling, coordTransform_nrrd_jl2elx
 export saveroi4Elastix
+export voxelize_roi
 
 """Image Normalization"""
 function normalizeImg(img::AbstractArray, thresh; f = mean)
@@ -393,6 +394,27 @@ function saveroi4Elastix(filename::String, roi_coords::Vector)
       write(io, string(coord[1], " ", coord[2], " ", coord[3]), "\n")
     end
   end
+end
+
+"""
+`r` is a tuple of pixel lenths in each dimention e.g.) (2,2,2)
+`rois` is a vector of Cartesian index in 3D
+"""
+function voxelize_roi(rois, img, r)
+  img1 = zeros(size(img))
+  for roi in rois
+    voxelize_roi!(img1, roi, img, r)
+  end
+  return(img1)
+end
+function voxelize_roi!(img1, roi, img, r)
+  v = img[roi]
+  fi = max(roi-CartesianIndex(r), CartesianIndex(1,1,1))
+  li = min(roi+CartesianIndex(r), CartesianIndex(size(img)))
+  for i in fi:li
+    img1[i] = img1[i]+v
+  end
+  return(img1)
 end
 
 
