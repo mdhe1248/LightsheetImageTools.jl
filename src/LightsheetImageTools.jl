@@ -393,7 +393,7 @@ function saveroi4Elastix(filename::String, roi_coords::Vector)
       #x, y, z = coordTransform_nrrd(coord[1], coord[2], coord[3])
       if length(coord) == 3
         write(io, string(coord[1], " ", coord[2], " ", coord[3]), "\n")
-      else if length(coord) == 2
+      elseif length(coord) == 2
         write(io, string(coord[1], " ", coord[2]), "\n")
       end
     end
