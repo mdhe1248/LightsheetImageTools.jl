@@ -267,11 +267,11 @@ end
 
 
 """blob_LoG cell detection. If image is too large, this may reduce the memory consumption. Possbily the edge might not be counted."""
-function blob_LoG_split(win::AbstractVector, img, σscales, edges)
+function blob_LoG_split(win::AbstractVector, img::AbstractArray{T, N}, σscales; edges::Union{Bool,Tuple{Bool,Vararg{Bool,N}}}=(true, ntuple(d->false, Val(N))...), σshape::NTuple{N,Real}=ntuple(d->1, Val(N)), rthresh::Real=1//1000) where {T<:Union{AbstractGray,Real},N}
   xi = round.(Int, collect(range(1, size(img, 1), length = win[1]+1)))
   yi = round.(Int, collect(range(1, size(img, 2), length = win[2]+1)))
   zi = round.(Int, collect(range(1, size(img, 3), length = win[3]+1)))
-  results = [];
+  results = Vector{Vector{BlobLoG}}();
   #n = prod(map(length, [xi, yi, zi]))
   #p = Progress(n, 1)
   for k in 1:win[3]
@@ -279,7 +279,7 @@ function blob_LoG_split(win::AbstractVector, img, σscales, edges)
       Threads.@threads for i in 1:win[1]
         coords = xi[i]:xi[i+1], yi[j]:yi[j+1], zi[k]:zi[k+1]
         subimg = view(img, coords...)
-        result = blob_LoG(subimg, σscales,)
+        result = blob_LoG(subimg, σscales; edges = edges, σshape = σhsape, rthresh = rthresh)
         #result coordinate correction
         for (idx, res) in enumerate(result)
           loc = res.location + CartesianIndex(xi[i]-1, yi[j]-1, zi[k]-1)
