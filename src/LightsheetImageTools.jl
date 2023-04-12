@@ -279,7 +279,7 @@ function blob_LoG_split(win::AbstractVector, img::AbstractArray{T, N}, σscales;
       Threads.@threads for i in 1:win[1]
         coords = xi[i]:xi[i+1], yi[j]:yi[j+1], zi[k]:zi[k+1]
         subimg = view(img, coords...)
-        result = blob_LoG(subimg, σscales; edges = edges, σshape = σhsape, rthresh = rthresh)
+        result = blob_LoG(subimg, σscales; edges = edges, σshape = σshape, rthresh = rthresh)
         #result coordinate correction
         for (idx, res) in enumerate(result)
           loc = res.location + CartesianIndex(xi[i]-1, yi[j]-1, zi[k]-1)
