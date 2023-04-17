@@ -232,13 +232,13 @@ function markImg!(img, pos::AbstractVector, rad)
   end
 end
 
-function markImg!(img, pos::Vector{BlobLoG{Float64, Float64, 3}}, rad)
+function markImg!(img, pos::Vector{<:BlobLoG}, rad)
   for i in 1:length(pos)
   markImg!(img, pos[i].location[2], pos[i].location[1], pos[i].location[3], rad)	
   end
 end
 
-function markImg!(img, pos::Vector{BlobLoG{Float32, Tuple{Float64, Float64, Float64}, 3}}, rad)
+function markImg!(img, pos::Vector{<:BlobLoG}, rad)
   for i in 1:length(pos)
   markImg!(img, pos[i].location[2], pos[i].location[1], pos[i].location[3], rad)	
   end
