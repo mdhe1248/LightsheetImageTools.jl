@@ -322,7 +322,7 @@ function blobSelection(results::Vector, thresh::Number)
 end
 
 """ remove cells near the edges of the image"""
-function blobSelection(results::Vector, imgaxes::Tuple, boundary::Int)
+function blobSelection(results::Vector{<:BlobLoG}, imgaxes::Tuple, boundary::Int)
   fi = first.(imgaxes) .+ boundary 
   la = last.(imgaxes) .- boundary 
   keep = falses(length(results))
@@ -339,7 +339,7 @@ function blobSelection(results::Vector, imgaxes::Tuple, boundary::Int)
 end
 
 """blobselection another way: using intensity thresholding nearby"""
-function blobSelectEdge(results::Vector, img::AbstractArray, threshold, r)
+function blobSelectEdge(results::Vector{<:BlobLoG}, img::AbstractArray, threshold, r)
   keep = falses(length(results))
   Threads.@threads for i in eachindex(results)
     Ifirst = max(results[i].location - CartesianIndex(r,r,r), CartesianIndex(1,1,1))
@@ -350,6 +350,55 @@ function blobSelectEdge(results::Vector, img::AbstractArray, threshold, r)
   end
   return(keep)
 end
+
+""" plot blob amplitudes and low and high threasholds """
+function plot_thresh(blobs, thresh::NTuple)
+  amps = [x.amplitude for x in results]
+  sorted_amps = sort(amps)
+  nblobs = length(blobs)
+  p1 = plot(sorted_amps);
+  yf, yl = 0, 80;
+  ylims!(p1, yf, yl)
+  hline!(p1, [thresh[1]])
+  p2 = plot(sorted_amps, title = "Low amplitude blobs", xlabel = "Counts", ylabel = "Amplitude");
+  xf, xl = nblobs-(thresh[2]+200), nblobs
+  xlims!(p2, xf, xl)
+  hline(p2, [thresh[2]], title = "High amplitude blobs", xlabel = "Counts", ylabel = "Amplitude")
+  yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
+  ylims!(p2, yf, yl)
+  plot(p1, p2, layout = (2,1), legned = false)
+  keep = amps .> thresh[1] .&& amps .< thresh[2]
+  return(fig1, keep)
+end
+
+
+#"""blobselection another way: using intensity thresholding nearby"""
+#function blobSelectEdge1(results::Vector{<:BlobLoG}, img::AbstractArray, threshold, r)
+#  keep = falses(length(results))
+#  buf = zeros((2*r+1)^2)
+#  imsz = size(img)
+#  #Threads.@threads for (i, result) in enumerate(results)
+#  for (i, result) in enumerate(results)
+#    loc = result.location
+#    Ifirst = max(loc - CartesianIndex(r,r,r), CartesianIndex(1,1,1))
+#    Ilast = min(loc + CartesianIndex(r,r,r), CartesianIndex(imsz))
+#    if  length(buf) == length(Ifirst:Ilast)
+#      for (i, ci) in enumerate(Ifirst:Ilast)
+#        buf[i] = img[ci]
+#        sort!(buf)
+#      end
+#      q = buf[ceil(Int, length(buf)*0.1)]
+#      if q > threshold
+#        keep[i] = true
+#      end
+#    else
+#      if quantile(vec(img[Ifirst:Ilast]), 0.1) > threshold
+#        keep[i] = true
+#      end
+#    end
+#  end
+#  return(keep)
+#end
 
 
 """
