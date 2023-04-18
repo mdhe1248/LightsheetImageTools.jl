@@ -352,6 +352,38 @@ function blobSelectEdge(results::Vector{<:BlobLoG}, img::AbstractArray, threshol
   return(keep)
 end
 
+"""blobselection another way: using intensity thresholding nearby: Trying buffer. A little bit less accurate in quantile computation"""
+function blobSelectEdge1(results::Vector{<:BlobLoG}, img::AbstractArray, threshold, r)
+  keep = falses(length(results))
+  nthreads = Threads.nthreads();
+  npixels = (2*r+1)^ndims(img)
+  bufs = [zeros(npixels) for i in 1:nthreads]
+  imsz = size(img)
+  qindx = ceil(Int, npixels*0.1)
+  Threads.@threads for i in 1:length(results)
+    loc = results[i].location
+    tid = Threads.threadid()
+    buf = bufs[tid]
+    Ifirst = max(loc - CartesianIndex(r,r,r), CartesianIndex(1,1,1))
+    Ilast = min(loc + CartesianIndex(r,r,r), CartesianIndex(imsz))
+    if length(buf) == length(Ifirst:Ilast)
+      for (j, ci) in enumerate(Ifirst:Ilast)
+        buf[j] = img[ci]
+      end
+      sort!(buf)
+      q = buf[qindx]
+      if q > threshold
+        keep[i] = true
+      end
+    else #buf not be used; but should be rare.
+      if quantile(vec(img[Ifirst:Ilast]), 0.1) > threshold
+        keep[i] = true
+      end
+    end
+  end
+  return(keep)
+end
+
 """ plot blob amplitudes and low and high threasholds """
 function plot_thresh(blobs, thresh::NTuple)
   amps = [x.amplitude for x in results]
