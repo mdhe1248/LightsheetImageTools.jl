@@ -3,14 +3,14 @@ module LightsheetImageTools
 using Images, NRRD, FileIO, Mmap
 using Distributions, Interpolations, Statistics
 using JLD2
-using Plots
+#using Plots
 #LinearAlgebra
 # Write your package code here.
 
 export lightsheetNorm, lightsheetNorm!, normalizeImg!
 export mmap_mapwindow!, mmap_fun!, _mean, create_NRRD_header1
 export blob_LoG_split, blobSelection, blobSelectEdge, replaceBlobPos
-export markImg!, plot_thresh
+export markImg! #, plot_thresh
 export coord_scaling, coordTransform_nrrd_jl2elx
 export saveroi4Elastix
 export voxelize_roi
@@ -384,25 +384,25 @@ function blobSelectEdge1(results::Vector{<:BlobLoG}, img::AbstractArray, thresho
   return(keep)
 end
 
-""" plot blob amplitudes and low and high threasholds """
-function plot_thresh(blobs, thresh::NTuple)
-  amps = [x.amplitude for x in results]
-  sorted_amps = sort(amps)
-  nblobs = length(blobs)
-  p1 = plot(sorted_amps);
-  yf, yl = 0, 80;
-  ylims!(p1, yf, yl)
-  hline!(p1, [thresh[1]])
-  p2 = plot(sorted_amps, title = "Low amplitude blobs", xlabel = "Counts", ylabel = "Amplitude");
-  xf, xl = nblobs-(thresh[2]+200), nblobs
-  xlims!(p2, xf, xl)
-  hline(p2, [thresh[2]], title = "High amplitude blobs", xlabel = "Counts", ylabel = "Amplitude")
-  yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
-  ylims!(p2, yf, yl)
-  plot(p1, p2, layout = (2,1), legned = false)
-  keep = amps .> thresh[1] .&& amps .< thresh[2]
-  return(fig1, keep)
-end
+#""" plot blob amplitudes and low and high threasholds """
+#function plot_thresh(blobs, thresh::NTuple)
+#  amps = [x.amplitude for x in results]
+#  sorted_amps = sort(amps)
+#  nblobs = length(blobs)
+#  p1 = plot(sorted_amps);
+#  yf, yl = 0, 80;
+#  ylims!(p1, yf, yl)
+#  hline!(p1, [thresh[1]])
+#  p2 = plot(sorted_amps, title = "Low amplitude blobs", xlabel = "Counts", ylabel = "Amplitude");
+#  xf, xl = nblobs-(thresh[2]+200), nblobs
+#  xlims!(p2, xf, xl)
+#  hline(p2, [thresh[2]], title = "High amplitude blobs", xlabel = "Counts", ylabel = "Amplitude")
+#  yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
+#  ylims!(p2, yf, yl)
+#  plot(p1, p2, layout = (2,1), legned = false)
+#  keep = amps .> thresh[1] .&& amps .< thresh[2]
+#  return(fig1, keep)
+#end
 
 
 #"""blobselection another way: using intensity thresholding nearby"""
