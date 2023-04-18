@@ -3,13 +3,14 @@ module LightsheetImageTools
 using Images, NRRD, FileIO, Mmap
 using Distributions, Interpolations, Statistics
 using JLD2
+using Plots
 #LinearAlgebra
 # Write your package code here.
 
 export lightsheetNorm, lightsheetNorm!, normalizeImg!
 export mmap_mapwindow!, mmap_fun!, _mean, create_NRRD_header1
 export blob_LoG_split, blobSelection, blobSelectEdge, replaceBlobPos
-export markImg!
+export markImg!, plot_thresh
 export coord_scaling, coordTransform_nrrd_jl2elx
 export saveroi4Elastix
 export voxelize_roi
