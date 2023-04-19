@@ -33,7 +33,7 @@ function blob_LoG_split1(tilesz::NTuple{N, Int}, img::AbstractArray{T, N}, σsca
   blobs = Vector{Vector{BlobLoG}}()
   Threads.@threads for i in 1:length(tileids_all)
     tileaxs = CartesianIndices(tileids_all[i])
-    blobs1 = blob_LoG(img[tileaxs], σscale; σshape = σshape)
+    blobs1 = blob_LoG(img[tileaxs], σscales; edges = edges, σshape = σshape, rthresh = rthresh)
     push!(blobs, blobs1)
 #    sleep(0.5)
   end
