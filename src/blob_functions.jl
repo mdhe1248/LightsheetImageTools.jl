@@ -34,12 +34,20 @@ function blob_LoG_split1(tilesz::NTuple{N, Int}, img::AbstractArray{T, N}, σsca
   Threads.@threads for i in 1:length(tileids_all)
     tileaxs = CartesianIndices(tileids_all[i])
     blobs1 = blob_LoG(img[tileaxs], σscales; edges = edges, σshape = σshape, rthresh = rthresh)
+    _update_blob_loc!(blobs1, first(tileaxs))
     push!(blobs, blobs1)
 #    sleep(0.5)
   end
   return(vcat(blobs...))
 end
 
+function _update_blob_loc!(blobs, pos::CartesianIndex{N}) where {N}
+  for (i, blob) in enumerate(blobs)
+    newpos = blob.location+pos-CartesianIndex(ntuple(n->1, N))
+    blobs[i] = BlobLoG(newpos, blob.σ, blob.amplitude)
+  end
+  return(blobs)
+end
 
 """select cells by intensity threshold"""
 function blobSelection(results::Vector, thresh::Number)
