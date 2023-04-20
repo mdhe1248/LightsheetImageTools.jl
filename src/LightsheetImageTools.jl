@@ -1,6 +1,6 @@
 module LightsheetImageTools
 
-using Images, NRRD, FileIO, Mmap
+using Images, NRRD, FileIO, Mmap, PyPlot
 using Distributions, Interpolations, Statistics, TiledIteration
 using JLD2
 
