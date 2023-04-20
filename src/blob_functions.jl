@@ -40,6 +40,7 @@ function blob_LoG_split1(tilesz::NTuple{N, Int}, img::AbstractArray{T, N}, σsca
     push!(blobs, blobs1)
     next!(p)
   end
+  finish!(p)
   return(vcat(blobs...))
 end
 
@@ -92,6 +93,7 @@ function blobSelectEdge(results::Vector{<:BlobLoG}, img::AbstractArray, threshol
     end
     next!(p)
   end
+  finish!(p)
   return(keep)
 end
 
