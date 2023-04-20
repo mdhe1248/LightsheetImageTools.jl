@@ -31,7 +31,8 @@ end
 function blob_LoG_split1(tilesz::NTuple{N, Int}, img::AbstractArray{T, N}, σscales; edges::Union{Bool,Tuple{Bool,Vararg{Bool,N}}}=(true, ntuple(d->false, Val(N))...), σshape::NTuple{N,Real}=ntuple(d->1, Val(N)), rthresh::Real=1//1000) where {T<:Union{AbstractGray,Real}, N}
   tileids_all = collect(TileIterator(axes(img), tilesz))
   blobs = Vector{Vector{BlobLoG}}()
-  Threads.@threads for i in 1:length(tileids_all)
+#  @showprogress Threads.@threads for i in 1:length(tileids_all)
+  @showprogress @Distributed for i in 1:length(tileids_all)
     tileaxs = CartesianIndices(tileids_all[i])
     blobs1 = blob_LoG(img[tileaxs], σscales; edges = edges, σshape = σshape, rthresh = rthresh)
     _update_blob_loc!(blobs1, first(tileaxs))
@@ -80,6 +81,7 @@ end
 function blobSelectEdge(results::Vector{<:BlobLoG}, img::AbstractArray, threshold, r)
   keep = falses(length(results))
   Threads.@threads for i in eachindex(results)
+  @showprogress @distributed for i in eachindex(results)
     Ifirst = max(results[i].location - CartesianIndex(r,r,r), CartesianIndex(1,1,1))
     Ilast = min(results[i].location + CartesianIndex(r,r,r), CartesianIndex(size(img)))
     if quantile(vec(img[Ifirst:Ilast]), 0.1) > threshold
