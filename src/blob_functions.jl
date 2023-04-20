@@ -84,7 +84,7 @@ function blobSelectEdge(results::Vector{<:BlobLoG}, img::AbstractArray, threshol
   keep = falses(length(results))
   n = length(results)
   p = Progress(n, "Edge blob filtering...", 50)
-  Threads.@threads for i in eachindex(results)
+  Threads.@threads for i in 1:n
     Ifirst = max(results[i].location - CartesianIndex(r,r,r), CartesianIndex(1,1,1))
     Ilast = min(results[i].location + CartesianIndex(r,r,r), CartesianIndex(size(img)))
     if quantile(vec(img[Ifirst:Ilast]), 0.1) > threshold
