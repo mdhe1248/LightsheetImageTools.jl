@@ -36,7 +36,6 @@ function blob_LoG_split1(tilesz::NTuple{N, Int}, img::AbstractArray{T, N}, σsca
     blobs1 = blob_LoG(img[tileaxs], σscales; edges = edges, σshape = σshape, rthresh = rthresh)
     _update_blob_loc!(blobs1, first(tileaxs))
     push!(blobs, blobs1)
-    sleep(1)
   end
   return(vcat(blobs...))
 end
