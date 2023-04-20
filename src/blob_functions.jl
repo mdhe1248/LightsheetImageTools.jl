@@ -118,23 +118,24 @@ function label_blobs(annotationImg, blobs)
   keep_lbl
 end
 
-""" plot blob amplitudes and low and high threasholds """
-function plot_thresh(blobs, thresh; ttl = "Threshold")
-  amps = [x.amplitude for x in blobs]
-  sorted_amps = sort(amps)
-  nblobs = length(blobs)
-  fig1 = figure(ttl); #Visualize thresholding
-  plot1 = fig1.add_subplot(2,1,1);
-  plot1.plot(sorted_amps);
-  yf, yl = 0, 80;
-  plot1.set_ylim([yf, yl]);
-  plot1.axhline(thresh[1], color = "red");
-  plot2 = fig1.add_subplot(2,1,2);
-  plot2.plot(sorted_amps)
-  xf, xl = nblobs-(thresh[2]+200), nblobs
-  plot2.set_xlim([xf, xl])
-  plot2.axhline(thresh[2], color = "red")
-  yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
-  plot2.set_ylim([yf, yl])
-  tight_layout()
-end
+# PyPlot or PythonPlot is unstable. Make local function
+#""" plot blob amplitudes and low and high threasholds """
+#function plot_thresh(blobs, thresh; ttl = "Threshold")
+#  amps = [x.amplitude for x in blobs]
+#  sorted_amps = sort(amps)
+#  nblobs = length(blobs)
+#  fig1 = figure(ttl); #Visualize thresholding
+#  plot1 = fig1.add_subplot(2,1,1);
+#  plot1.plot(sorted_amps);
+#  yf, yl = 0, 80;
+#  plot1.set_ylim([yf, yl]);
+#  plot1.axhline(thresh[1], color = "red");
+#  plot2 = fig1.add_subplot(2,1,2);
+#  plot2.plot(sorted_amps)
+#  xf, xl = nblobs-(thresh[2]+200), nblobs
+#  plot2.set_xlim([xf, xl])
+#  plot2.axhline(thresh[2], color = "red")
+#  yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
+#  plot2.set_ylim([yf, yl])
+#  tight_layout()
+#end
