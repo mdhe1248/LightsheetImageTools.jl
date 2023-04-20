@@ -124,12 +124,14 @@ function plot_thresh(blobs, thresh; ttl = "Threshold")
   sorted_amps = sort(amps)
   nblobs = length(blobs)
   fig1 = figure(ttl); #Visualize thresholding
-  plot1 = fig1.add_subplot(2,1,1);                                                                    plot1.plot(sorted_amps);
+  plot1 = fig1.add_subplot(2,1,1);
+  plot1.plot(sorted_amps);
   yf, yl = 0, 80;
   plot1.set_ylim([yf, yl]);
   plot1.axhline(thresh[1], color = "red");
   plot2 = fig1.add_subplot(2,1,2);
-  plot2.plot(sorted_amps)                                                                             xf, xl = nblobs-(thresh[2]+200), nblobs
+  plot2.plot(sorted_amps)
+  xf, xl = nblobs-(thresh[2]+200), nblobs
   plot2.set_xlim([xf, xl])
   plot2.axhline(thresh[2], color = "red")
   yf, yl = sorted_amps[nblobs-(thresh[2]+200)], last(sorted_amps)
