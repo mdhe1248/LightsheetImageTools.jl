@@ -37,19 +37,23 @@ end
 
 function markImg!(img, pos::AbstractVector, rad)
   for i in 1:length(pos)
-  markImg!(img, pos[i][2], pos[i][1], pos[i][3], rad)	
+    p = collect(pos[i])
+    p[[1,2]] = p[[2,1]]
+    markImg!(img, p..., rad)	
   end
 end
 
-function markImg!(img, pos::Vector{<:BlobLoG}, rad)
-  for i in 1:length(pos)
-  markImg!(img, pos[i].location[2], pos[i].location[1], pos[i].location[3], rad)	
-  end
-end
+#function markImg!(img, pos::Vector{<:BlobLoG}, rad)
+#  for i in 1:length(pos)
+#  markImg!(img, pos[i].location[2], pos[i].location[1], pos[i].location[3], rad)	
+#  end
+#end
 
 function markImg!(img, pos::Vector{<:BlobLoG}, rad)
   for i in 1:length(pos)
-  markImg!(img, pos[i].location[2], pos[i].location[1], pos[i].location[3], rad)	
+    p = collect(pos[i].location.I)
+    p[[1,2]] = p[[2,1]]
+    markImg!(img, pos[i].location.I..., rad)	
   end
 end
 
